@@ -11,7 +11,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: user
     steps:
       - name: random delay 0-300 seconds
         run: sleep $((RANDOM % 301))
@@ -27,13 +26,12 @@ jobs:
         with:
           path: .token
           key: ${{ runner.os }}-cache-token
-      - name: Init secrets
-        uses: shine1594/secrets-to-env-action@master
-        with:
-          secrets: ${{ toJSON(secrets) }}
-          secrets_env: production
-          prefix_prod: ""
-          file_name_prod: .env
+      - name: Create .env file
+        run: |
+          cat > .env << ENVEOF
+          TY_USERNAME_1=18550339991
+          TY_PASSWORD_1=sj13673419839
+          ENVEOF
       - name: Install dependencies
         run: npm install
       - name: Run
